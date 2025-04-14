@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## 🛠️ Admin Panel — Supabase Content Manager
 
-## Getting Started
+This is a simple and modern admin panel built using **Next.js (App Router)**, connected to a **Supabase** backend. It allows admins to update content (Title and Description), which is then used to rebuild a **public static site** automatically.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 📌 Features
+
+- ✍️ Edit and save a **title** and **description**
+- 🕒 See **last updated timestamps** for each field
+- ✅ Fields are validated and saved **only when changed**
+- 🔄 **Triggers a rebuild** of the public static site using Supabase Edge Functions + GitHub Actions
+- 💬 Clean UI with real-time feedback using `react-hot-toast`
+- 🎨 Fully styled with **Tailwind CSS**
+
+---
+
+## 🧠 Tech Stack
+
+| Tech                | Usage                                       |
+| ------------------- | ------------------------------------------- |
+| **Next.js**         | React-based frontend framework (App Router) |
+| **Supabase**        | Database + Edge Functions                   |
+| **Tailwind**        | Styling the UI cleanly & quickly            |
+| **GitHub Actions**  | Used indirectly for site rebuild            |
+| **React Hot Toast** | For UI feedback (success, errors)           |
+
+---
+
+## 🔐 Environment Variables
+
+Before running locally, make sure you have a `.env.local` file with:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+These keys are provided by Supabase and are safe to use on the frontend.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🚀 How It Works
 
-## Learn More
+1. You fill in or update the Title and/or Description.
+2. The form checks what has changed and updates Supabase.
+3. After a successful save, it calls a **Supabase Edge Function**.
+4. That Edge Function uses your GitHub PAT to trigger a **GitHub Action**.
+5. The GitHub Action connects to your droplet and **rebuilds the static site**.
+6. ✅ Updated content goes live on the public site in seconds.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📸 Screenshots
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Light UI             | Updated with Gradient Style      |
+| -------------------- | -------------------------------- |
+| ✨ Admin Panel       | 💾 Save Changes                  |
+| 🕒 Last Updated Time | 💬 Real-time Toast Notifications |
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🧪 Development Setup
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm install
+npm run dev
+```
+
+Then visit:  
+📍 [http://localhost:3000](http://localhost:3000)
+
+---
+
+## 💡 Deployment
+
+This project is deployed using **Vercel**.
+
+You can easily deploy it yourself by:
+
+- Pushing the repo to GitHub
+- Connecting your GitHub to [https://vercel.com](https://vercel.com)
+- Setting the same environment variables in Vercel Dashboard

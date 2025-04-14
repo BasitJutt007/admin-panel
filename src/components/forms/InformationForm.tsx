@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import Button from "@/components/buttons/Button";
@@ -91,50 +90,53 @@ const InformationForm: React.FC = () => {
         form.title === initial.title && form.description === initial.description;
 
     return (
-        <div className="w-full max-w-2xl bg-[#1e3261] p-8 rounded-2xl shadow-2xl space-y-6 text-white">
-            <h2 className="text-3xl font-semibold text-white">Admin Panel</h2>
+        <div className="w-full max-w-4xl bg-gradient-to-br from-[#1e3261] to-[#394d7b] p-10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] space-y-10 text-white transition-all">
+            <h2 className="text-4xl font-bold tracking-tight text-center">🛠️ Admin Panel</h2>
 
-            <div>
-                <label className="block font-medium text-white">Title</label>
+            <div className="space-y-2">
+                <label className="block font-semibold text-lg">Title</label>
                 <input
                     type="text"
                     value={form.title}
                     onChange={(e) =>
                         setForm((prev) => ({ ...prev, title: e.target.value }))
                     }
-                    className="w-full bg-[#1e3261] border border-white/30 text-white p-3 rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-white placeholder:text-slate-400"
+                    className="w-full bg-[#1e3261]/60 border border-white/30 text-white placeholder:text-white/40 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-white focus:bg-[#1e3261]/80 transition-all duration-150"
                     placeholder="Enter title"
                 />
-                <p className="text-xs text-slate-300 mt-1">
-                    {" "}
+                <p className="text-xs text-slate-300">
                     Last updated: {formatTimestamp(timestamps.titleUpdatedAt)}
                 </p>
             </div>
 
-            <div>
-                <label className="block font-medium text-white">Description</label>
+            <div className="space-y-2">
+                <label className="block font-semibold text-lg">Description</label>
                 <textarea
-                    rows={5}
+                    rows={7}
                     value={form.description}
                     onChange={(e) =>
                         setForm((prev) => ({ ...prev, description: e.target.value }))
                     }
-                    className="w-full bg-[#1e3261] border border-white/30 text-white p-3 rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-white placeholder:text-slate-400"
+                    className="w-full bg-[#1e3261]/60 border border-white/30 text-white placeholder:text-white/40 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-white focus:bg-[#1e3261]/80 transition-all duration-150"
                     placeholder="Enter description"
                 />
-                <p className="text-xs text-slate-300x mt-1">
-                    {" "}
+                <p className="text-xs text-slate-300">
                     Last updated: {formatTimestamp(timestamps.descriptionUpdatedAt)}
                 </p>
             </div>
 
-            <div className="flex justify-center">
-                <Button onClick={handleSave} isLoading={loading} disabled={isDisabled}>
-                    Save Changes
+            <div className="flex justify-center pt-2">
+                <Button
+                    onClick={handleSave}
+                    isLoading={loading}
+                    disabled={isDisabled}
+                    className="!px-8 !py-3 !text-lg"
+                >
+                    💾 Save Changes
                 </Button>
             </div>
         </div>
-    );
+    )
 };
 
 export default InformationForm;
