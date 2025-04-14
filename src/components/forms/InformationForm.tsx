@@ -40,7 +40,7 @@ const InformationForm: React.FC = () => {
             setLoading(true);
             const now = new Date().toISOString();
             const updates: Partial<Content> = {};
-            let savedFields: string[] = [];
+            const savedFields: string[] = []
             let shouldTriggerRebuild = false;
 
             if (form.title !== initial.title) {
@@ -81,6 +81,7 @@ const InformationForm: React.FC = () => {
                 await triggerRebuild();
             }
         } catch (error) {
+            console.log("Error saving data:", error);
             toast.error("Error saving data!");
         } finally {
             setLoading(false);
