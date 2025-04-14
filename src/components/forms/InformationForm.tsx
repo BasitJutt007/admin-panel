@@ -6,6 +6,7 @@ import Button from "@/components/buttons/Button";
 import toast from "react-hot-toast";
 import { Content } from "@/types";
 import { formatTimestamp } from "@/utils/timeformater";
+import { triggerRebuild } from "@/utils/triggerRebuilds";
 
 const InformationForm: React.FC = () => {
     const [form, setForm] = useState({ title: "", description: "" });
@@ -33,45 +34,59 @@ const InformationForm: React.FC = () => {
         fetchContent();
     }, []);
 
+
+
     const handleSave = async () => {
         try {
-            setLoading(true)
-            const now = new Date().toISOString()
-            const updates: Partial<Content> = {}
-            let savedFields: string[] = []
+            setLoading(true);
+            const now = new Date().toISOString();
+            const updates: Partial<Content> = {};
+            let savedFields: string[] = [];
+            let shouldTriggerRebuild = false;
 
             if (form.title !== initial.title) {
                 updates.title = form.title.trim();
-                updates.titleUpdatedAt = now
-                savedFields.push('Title')
+                updates.titleUpdatedAt = now;
+                savedFields.push("Title");
+                shouldTriggerRebuild = true;
             }
 
             if (form.description !== initial.description) {
                 updates.description = form.description.trim();
-                updates.descriptionUpdatedAt = now
-                savedFields.push('Description')
+                updates.descriptionUpdatedAt = now;
+                savedFields.push("Description");
+                shouldTriggerRebuild = true;
             }
 
-            if (savedFields.length === 0) return
+            if (savedFields.length === 0) return;
 
-            const { error } = await supabase.from('content').update(updates).eq('id', 1)
+            const { data, error } = await supabase
+                .from("content")
+                .update(updates)
+                .eq("id", 1);
 
-            if (!error) {
-                setInitial({ ...form })
-                if (updates.titleUpdatedAt) setTimestamps((prev) => ({ ...prev, titleUpdatedAt: now }))
-                if (updates.descriptionUpdatedAt) setTimestamps((prev) => ({ ...prev, descriptionUpdatedAt: now }))
-
-                // Show toast message dynamically
-                toast.success(`${savedFields.join(' & ')} updated successfully!`)
+            if (error) {
+                console.error("❌ Supabase Update Error:", error);
+                toast.error("Something went wrong!");
             } else {
-                toast.error('Something went wrong!')
+                console.log("✅ Data updated:", data);
+                setInitial({ ...form });
+                if (updates.titleUpdatedAt)
+                    setTimestamps((prev) => ({ ...prev, titleUpdatedAt: now }));
+                if (updates.descriptionUpdatedAt)
+                    setTimestamps((prev) => ({ ...prev, descriptionUpdatedAt: now }));
+                toast.success(`${savedFields.join(" & ")} updated successfully!`);
+            }
+
+            if (shouldTriggerRebuild) {
+                await triggerRebuild();
             }
         } catch (error) {
-            toast.error('Error saving data!')
+            toast.error("Error saving data!");
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
     const isDisabled =
         form.title === initial.title && form.description === initial.description;
 
@@ -120,7 +135,6 @@ const InformationForm: React.FC = () => {
             </div>
         </div>
     );
-}
-
+};
 
 export default InformationForm;
